@@ -3,7 +3,7 @@ Official repository for Added Prognostic Value of 3D Deep Learning-Derived Featu
 
 ## Directories Structure
 
- 3D_MRI_survival_glioma
+    3D_MRI_survival_glioma
     ├─3D grad CAM
     ├─model
     │  ├─attention_models
@@ -39,11 +39,12 @@ Second
     docker run --gpus all -it snuhradaicon/gbl_surv_distribution:snuhradaicon
 
 third
- 1. Run python main_copy.py 
+
+Run python main_copy.py 
 
     python main_copy.py 
 
- 2. Run python train_inference_copy.py
+Run python train_inference_copy.py
 
     python train_inference_copy.py
 
@@ -63,32 +64,32 @@ Second
     docker run --gpus all -it snuhradaicon/gbl_surv_custom:snuhradaicon
 
 Third
- 1. You must load data in container
+1.You must load data in container
  
- 2. Preprocess
-    2-1. Run skull_strip_coreg.sh
+2.Preprocess
+ 
+2-1.Run skull_strip_coreg.sh
 
     sh skull_strip_coreg.sh [root_dir] [--input_dir] [input_dir]
 
     * input_arg : $1 Real root_dir $2 --input_dir (string) $3 your Real input_dir (Sub-directory of root_dir )
     
     * if you don't run a sh file, ref: <https://github.com/NeuroAI-HD/HD-GLIO>
-
-    2-2. Run resample.py
+2-2.Run resample.py
 
     python resample.py [--fix_sequence] [--resize_type] [--dataset_name] [--root_dir]
 
     * input_arg : --fix_sequence, --resize_type(defalut:BraTS), --dataset_name, --root_dir
  
- 3. Run python main_copy.py
+3. Run python main_copy.py
 
     python main_copy.py
  
- 4. Run python train_inference_copy.py
+4. Run python train_inference_copy.py
  
     python train_inference_copy.py
 
- 5. Run python inference_copy.py
+5. Run python inference_copy.py
 
     python inference_copy.py
 
