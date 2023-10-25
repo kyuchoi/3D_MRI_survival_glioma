@@ -43,21 +43,6 @@ from scipy import ndimage
 
 #%%
 
-'''
-20221031: TO DO LIST
-1. augment 해서 높아진 valid loss 62에서 낮추기 --> overfit 이었고, augment 종류 줄여서 해결됨
-2. 예전 코드 scheduler 가져와보기
-3. run_fold: for 문으로 돌리기
-4. c-index 나오면 grad-CAM + curve 그리기: 일단 train,valid c-index라도 잘 나오는지 확인해보기 (안되면 5-fCV 결과만 낼 수도 있으니)
-5. label correction 확인: 1.5
-6. 안되면 아예 loss를 c-index 로 써보기
-7. 안되면 DeepHit (원래 pycox 코드로 A6000 달아서 돌리면 됨) 쓰거나 seg 말고 resize 로 돌려보기: DeepHit 쓰면 좋은데 문제는 그러려면 nnet에서 y_train transform 하는 과정을 pycox 처럼 다르게 해야 함 
-8. 안되면 augmentation 여러 가지 써보기: 현재 crop 64 + gaussian만 사용중
-9. grad-CAM + calibration plot 등 원래 pycox 코드 뒷단에 있던 것들 추가하기
-'''
-
-#%%
-
 def get_args_parser(add_help=True):
     parser = argparse.ArgumentParser(description='Deep survival GBL: image only', add_help=add_help)
     parser.add_argument('--gpu_id', type=int, default=0)
