@@ -1,5 +1,7 @@
 # 3D_MRI_survival_glioma
-Official repository for Added Prognostic Value of 3D Deep Learning-Derived Features from Preoperative MRI for Adult-type Diffuse Gliomas
+*Official repository* for *Added Prognostic Value of 3D Deep Learning-Derived Features from Preoperative MRI for Adult-type Diffuse Gliomas*
+
+The developed 3-types based network, *'Squeeze-and-Excitation ResNeXt'*, *'DenseNet'*, *'Resnet-Convolutional Block Attention Module'*
 
 ## Directories Structure
 
@@ -26,11 +28,12 @@ Official repository for Added Prognostic Value of 3D Deep Learning-Derived Featu
 2. snuhradaicon/gbl_surv_custom:snuhradaicon (custom version)
 
 
-### Composition (File in Docker images)
-1. main_copy.py, train_inference_copy.py, data (UCSF,TCGA,UPenn), utils_copy.py, attention_models.py, Preprocess (1 bash file, 1 python file)  
+### Composition (File in Docker images)  
+
+```1. main_copy.py, train_inference_copy.py, data (UCSF,TCGA,UPenn), utils_copy.py, attention_models.py, Preprocess (1 bash file, 1 python file)```  
   
 
-2. main_copy.py, train_inference_copy.py, inference_copy.py, utils_copy.py, attention_models.py, data (UCSF,TCGA,UPenn), preprocess (1 bash file, 1 python file)
+```2. main_copy.py, train_inference_copy.py, inference_copy.py, utils_copy.py, attention_models.py, data (UCSF,TCGA,UPenn), preprocess (1 bash file, 1 python file)```
 
 
 ## Use (Docker)
@@ -79,11 +82,11 @@ Second
 Third
 
 
-```1. You must load your data in container.```
+```1.``` You must load your data in container.
 
 
-```2. Have to load a label of data (duration,event) in container.```  
-  
+```2.``` Have to load a label of data (duration,event) in container.  
+
 
 Fourth
 
