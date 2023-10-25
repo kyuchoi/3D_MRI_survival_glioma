@@ -1,7 +1,7 @@
 # 3D_MRI_survival_glioma
 *Official repository* for *Added Prognostic Value of 3D Deep Learning-Derived Features from Preoperative MRI for Adult-type Diffuse Gliomas*
 
-The developed 3-types based network, *'Squeeze-and-Excitation ResNeXt'*, *'DenseNet'*, *'Resnet-Convolutional Block Attention Module'*
+The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **DenseNet**, **Resnet-Convolutional Block Attention Module**), *'CustomNet'* extracts spatial features from preoperative whole-brain MRI images. It aims to quantitatively evaluate the additional value of these imaging features as prognostic factors, independently from well-established clinical and pathological prognostic factors, for adult-type gliomas.
 
 ## Directories Structure
 
