@@ -23,10 +23,13 @@ Official repository for Added Prognostic Value of 3D Deep Learning-Derived Featu
 1. snuhradaicon/gbl_surv_distribution:snuhradaicon (released version)
 
 
+
 2. snuhradaicon/gbl_surv_custom:snuhradaicon (custom version)
+
 
 ### Composition (File in Docker images)
 1. main_copy.py, train_inference_copy.py, data (UCSF,TCGA,UPenn), utils_copy.py, attention_models.py, Preprocess (1 bash file, 1 python file)
+
 
 
 2. main_copy.py, train_inference_copy.py, inference_copy.py, utils_copy.py, attention_models.py, data (UCSF,TCGA,UPenn), preprocess (1 bash file, 1 python file)
@@ -56,9 +59,9 @@ Third
 
     python train_inference_copy.py
 
-main_copy.py -> input_args : --gpu_id, --test_gpu_id, --epochs, --seed, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --ext_dataset_name, --dataset_list,
+""main_copy.py (input_args)"" : --gpu_id, --test_gpu_id, --epochs, --seed, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --ext_dataset_name, --dataset_list,
 
-train_inference_copy.py -> inpurt args : --gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
+""train_inference_copy.py (input_args)"": --gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
 
 
 #### if you want to use a custom version,
@@ -77,13 +80,10 @@ Second
 Third
 
 
-
-3-1. You must load your data in container.
-
+```3-1. You must load your data in container.```
 
 
-3-2. Have to load a label of data (duration,event) in container.
-
+```3-2. Have to load a label of data (duration,event) in container.```
 
 
 Fourth (Preprocess)
@@ -118,4 +118,4 @@ Fifth
 
     python inference_copy.py
 
-inference_copy.py -> inpurt args : --test_gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
+""inference_copy.py (input args)"" : --test_gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
