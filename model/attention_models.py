@@ -1,47 +1,5 @@
 #%%
 
-'''
-Refs:
-1. Resnet_cbam: https://github.com/luuuyi/CBAM.PyTorch/blob/master/model/resnet_cbam.py
-2. SE-ResNext50 but with attention : https://www.kaggle.com/code/debarshichanda/seresnext50-but-with-attention
---> 여기 나오는 SAM optimizer 써보기
-
-3. BoTnet: 
---> "By just replacing the spatial convolutions with global self-attention in the final three bottleneck blocks"
---> "BoTNet, we also point out how ResNet bottleneck blocks with self-attention can be viewed as Transformer blocks."
-1) Official: https://github.com/lucidrains/bottleneck-transformer-pytorch/blob/main/bottleneck_transformer_pytorch/bottleneck_transformer_pytorch.py
-2) Non-official: https://github.com/MartinGer/Bottleneck-Transformers-for-Visual-Recognition/blob/master/BoTNet_Layer.py
-
-4. SACNN: https://github.com/guoyii/SACNN/blob/master/model_function.py 
-
-5. ViT in 3D from BraTS-Radiogenomics challenge: 
-1) https://www.kaggle.com/code/super13579/vit-vision-transformer-3d-with-one-mri-type
---> "I use @ROLAND LUETHY great notebook, and change the efficient3D model to VIT 3D model, just want to try Vit on 3D"
-2) https://www.kaggle.com/code/rluethy/efficientnet3d-with-one-mri-type/notebook 
---> "Use models with only one MRI type, then ensemble the 4 models"
-
-6. ViT-V-Net: IXI, ADNI, OASIS, ABIDE 등 다른 brain MRI open dataset 으로 registration 했던 연구
-https://github.com/junyuchen245/ViT-V-Net_for_3D_Image_Registration_Pytorch
-'''
-
-'''
-(20221017 오전 완료) 참고: 
-1) 현재 전처리 2mm resize로 SNUH, severance, UPenn dataset 모두 마쳐서 resized_BraTS 디렉토리 안에
-각각 t1ce_resized.nii.gz 이렇게 들어있음. 
-2) 문제는 아직, UPenn의 seg.nii.gz 에서 ET 4->2, ED 2->1 로 고쳐야 하는데, 
-3) Necrosis가 1인지 0인지 확인해보고 hd_glio에 맞게 다시 label 값 고쳤고, seg_resized.nii.gz로 저장했고,
-4) 원래의 UPenn label 따라 한 건 brats_seg_resized.nii.gz 로 이름 바꿔 저장함.
-
-20221016 저녁 앞으로 할 일 결론:
-1. 총 3개의 코드를 조합한다.
-1) 전체 골격 코드 (https://www.kaggle.com/code/debarshichanda/seresnext50-but-with-attention)
-2) 그 안의 BottleBlock 부분 소스코드 (https://github.com/lucidrains/bottleneck-transformer-pytorch/blob/main/bottleneck_transformer_pytorch/bottleneck_transformer_pytorch.py)
-3) 그 안의 Attention 부분 바꿀 소스코드 (https://github.com/guoyii/SACNN/blob/master/model_function.py)
-
-2. /mnt/hdd2/kschoi/GBL/code/attention_practice.py 에다가, 
-1)의 골격 코드 그대로 쓰되, 2)에 나오는 BottleBlock 부분 구현을 바꾸고, 구체적으로 3)의 SACNN 에서 나온 attention 
-코드로 바꿔서 차원을 맞춰준다.
-'''
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -50,14 +8,6 @@ import torch.utils.model_zoo as model_zoo
 
 
 __all__ = ['se_resnext50', 'resnet50_cbam']
-# model_urls = {
-#     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
-#     'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
-#     'resnet50': 'https://download.pytorch.org/models/resnet50-19c8e357.pth',
-#     'resnet101': 'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
-#     'resnet152': 'https://download.pytorch.org/models/resnet152-b121ed3d.pth',
-# }
-
 
 def conv3x3(in_planes, out_planes, stride=1):
     "3x3 convolution with padding"
@@ -313,28 +263,6 @@ class SEResNext(nn.Module):
 
         return nn.Sequential(*layers)
         
-    #def forward(self, x):
-    #    x = self.conv1(x)
-    #    x = self.bn1(x)
-    #    x = self.relu(x)
-    #    x = self.maxpool(x)
-    
-    #    x = self.layer1(x)
-    #    x = self.layer2(x)
-    #    x = self.layer3(x)
-    #    x = self.layer4(x)
-    
-    #    x = self.avgpool(x)
-    #    x = x.view(x.size(0), -1)
-            
-    #    x = self.fc(x)
-            
-    #    fc_graph = torch.nn.Linear(x.in_features, 168)
-    #    fc_vowel = torch.nn.Linear(x.in_features, 11)
-    #    fc_conso = torch.nn.Linear(x.in_features, 7)
-            
-    #    return fc_graph, fc_vowel, fc_conso
-        
         
 def se_resnext50(**kwargs):
     
@@ -354,5 +282,3 @@ def resnet50_cbam(pretrained=False, **kwargs):
         now_state_dict.update(pretrained_state_dict)
         model.load_state_dict(now_state_dict)
     return model
-
-# %%
