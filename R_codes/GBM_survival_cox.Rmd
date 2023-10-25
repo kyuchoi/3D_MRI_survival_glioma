@@ -1,0 +1,196 @@
+---
+title: "GBM_survival_cox"
+output: html_document
+date: '2022-08-21'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r library}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(survival)
+library(ggfortify)
+library(maxstat)
+library(survminer)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+root_dir = '/mnt/hdd/kschoi/GBM/CleanData_cks/DL_features'
+setwd(root_dir)
+# print(list.dirs())
+
+label_dir = '/mnt/hdd/kschoi/GBM/CleanData_cks/DL_features/DH_seq2_b16_mri_DenseNet_aug_s9876543_b16_spl0.8_e50_all_long'
+# label_dir_list = basename(list.dirs())
+# label_dir = file.path(root_dir, label_dir_list[length(label_dir_list)])
+print(label_dir)
+```
+```{r}
+# csv_path = file.path(label_dir,'SNUH_merged_all_long_prediction_and_label_selected.csv')
+# csv_path = file.path(label_dir,'SNUH_temporal_all_long_prediction_and_label_selected.csv')
+csv_path = file.path(label_dir,'severance_all_long_prediction_and_label_selected.csv')
+
+df = read.csv(csv_path)
+
+df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
+
+print(nrow(df))
+```
+
+``` {r}
+# ref: 
+# 1) https://didalsgur.tistory.com/entry/%EB%8D%B0%EC%9D%B4%ED%84%B0-%ED%94%84%EB%A0%88%EC%9E%84-0-%EB%98%90%EB%8A%94-1%EB%A1%9C-%EB%B3%80%ED%99%98-tidyverse
+# 2) https://gooopy.tistory.com/20 
+
+df = df %>% mutate(
+  EOR = ifelse(EOR %in% c('biopsy', 'partial'), 'nontotal', 'total'), # , 'subtotal'
+  EOR = factor(EOR),
+  MRI_avg_early = MRI1+MRI2+MRI3+MRI4,
+  # MRI_avg_early = 0.2 * MRI1+ 0.2 * MRI2+ 0.3 * MRI3 + 0.3 * MRI4,
+  MRI_avg_early_late = MRI1+MRI2+MRI3+MRI4+MRI9
+)
+
+df$EOR
+df$MRI_avg_early
+
+```
+
+```{r}
+km_fit <- survfit(Surv(duration, event) ~ 1, data=df)
+summary(km_fit, times = c(1,30,60,90*(1:10)))
+autoplot(km_fit)
+```
+```{r}
+MRI_avg_early_stat <- maxstat.test(Surv(duration, event) ~ MRI_avg_early, data=df,smethod='LogRank', pmethod='exactGauss', abseps=0.01)
+MRI_avg_early_stat
+plot(MRI_avg_early_stat)
+
+MRI_avg_early_cutoff <- MRI_avg_early_stat$estimate
+# cutoff <- 0.5957326
+MRI_avg_early_group = ifelse(df$MRI_avg_early<=MRI_avg_early_cutoff, 0, 1)
+MRI_avg_early_group = factor(MRI_avg_early_group)
+levels(MRI_avg_early_group) = c('below','above')
+MRI_avg_early_group
+```
+```{r}
+MRI_avg_early_late_stat <- maxstat.test(Surv(duration, event) ~ MRI_avg_early, data=df,smethod='LogRank', pmethod='exactGauss', abseps=0.01)
+MRI_avg_early_stat
+plot(MRI_avg_early_late_stat)
+
+MRI_avg_early_late_cutoff <- MRI_avg_early_late_stat$estimate
+# cutoff <- 0.5957326
+MRI_avg_early_late_group = ifelse(df$MRI_avg_early_late<=MRI_avg_early_late_cutoff, 0, 1)
+MRI_avg_early_late_group = factor(MRI_avg_early_late_group)
+levels(MRI_avg_early_late_group) = c('below','above')
+MRI_avg_early_late_group
+```
+
+```{r}
+MRI4_stat <- maxstat.test(Surv(duration, event) ~ MRI4, data=df,smethod='LogRank', pmethod='exactGauss', abseps=0.01)
+MRI4_stat
+plot(MRI4_stat)
+
+MRI4_cutoff <- MRI4_stat$estimate
+# cutoff <- 0.5957326
+MRI4_group = ifelse(df$MRI4<=MRI4_cutoff, 0, 1)
+MRI4_group = factor(MRI4_group)
+levels(MRI4_group) = c('below','above')
+MRI4_group
+```
+
+```{r}
+MRI3_stat <- maxstat.test(Surv(duration, event) ~ MRI3, data=df,smethod='LogRank', pmethod='exactGauss', abseps=0.01)
+MRI3_stat
+plot(MRI3_stat)
+
+MRI3_cutoff <- MRI3_stat$estimate
+# cutoff <- 0.5957326
+MRI3_group = ifelse(df$MRI3<=MRI3_cutoff, 0, 1)
+MRI3_group = factor(MRI3_group)
+levels(MRI3_group) = c('below','above')
+MRI3_group
+```
+
+``` {r}
+uni_cox <- coxph(Surv(duration, event) ~ MRI3_group, data=df, x = TRUE)
+summary(uni_cox)
+```
+
+``` {r}
+uni_cox <- coxph(Surv(duration, event) ~ MRI4_group, data=df, x = TRUE)
+summary(uni_cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ age + sex + MGMT + EOR, data=df, x = TRUE)
+summary(cox)
+```
+```{r}
+cox <- coxph(Surv(duration, event) ~ MRI_avg_early, data=df, x = TRUE)
+summary(cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ MRI_avg_early_group, data=df, x = TRUE)
+summary(cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ MRI_avg_early_late, data=df, x = TRUE)
+summary(cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ MRI_avg_early_late_group, data=df, x = TRUE)
+summary(cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ MRI3, data=df, x = TRUE)
+summary(cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ MRI4, data=df, x = TRUE)
+summary(cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ sex + age + IDH + MGMT + EOR + MRI_avg_early_group, data=df, x = TRUE) #  + IDH
+summary(cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ sex + age + IDH + MGMT + EOR + MRI4_group, data=df, x = TRUE) #  + IDH
+summary(cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ sex + age + IDH + MGMT + EOR + 
+               MRI1 + 
+               MRI2 + 
+               MRI3 +
+               MRI4 + 
+               MRI5 + 
+               MRI6 +
+               MRI7 + 
+               MRI8 + 
+               MRI9 
+               , data=df, x = TRUE) #  + IDH
+summary(cox)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

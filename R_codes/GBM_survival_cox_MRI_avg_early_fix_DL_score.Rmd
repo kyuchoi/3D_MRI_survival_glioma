@@ -1,0 +1,343 @@
+---
+title: "GBM_survival_cox"
+output: html_document
+date: '2022-08-21'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r library}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(survival)
+library(ggfortify)
+library(maxstat)
+library(survminer)
+
+# for GND test
+library(Hmisc)
+library(survival)
+
+# for HL test
+library(PredictABEL)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+root_dir = '/mnt/hdd/kschoi/GBM/CleanData_cks/DL_features/best'
+setwd(root_dir)
+list.dirs()
+len_list = length(list.dirs())
+len_list
+
+# label_dir = '/mnt/hdd/kschoi/GBM/CleanData_cks/DL_features/best/LH_seq1_b16_mri_DenseNet_aug_s9876543_b16_spl0.8_e25_all_long'
+label_dir = file.path(root_dir, 'LH_seq1_b16_mri_DenseNet_aug_s123456_b16_spl0.8_e25_all_long')
+# label_dir = file.path(root_dir, 'LH_seq2_b16_mri_DenseNet_aug_s123456_b16_spl0.8_e25_all_long')
+# label_dir = file.path(root_dir, 'DH_seq2_b16_mri_DenseNet_aug_s9876543_b16_spl0.8_e50_all_long') # BEST
+# label_dir = file.path(root_dir, basename(list.dirs()[[16]])) # 2부터 시작: 16 only working
+label_dir
+```
+
+```{r}
+train_csv_path = file.path(label_dir,'SNUH_merged_all_long_prediction_and_label_selected.csv')
+# test_csv_path = file.path(label_dir,'SNUH_temporal_all_long_prediction_and_label_selected.csv')
+test_csv_path = file.path(label_dir,'severance_all_long_prediction_and_label_selected.csv')
+
+df = read.csv(train_csv_path)
+test_df = read.csv(test_csv_path)
+
+chr2factor <- function(df){
+  df[sapply(df, is.character)] <- lapply(df[sapply(df, is.character)], as.factor)
+  return (df)
+}
+
+df <- chr2factor(df)
+test_df <- chr2factor(test_df)
+
+print(nrow(df))
+print(nrow(test_df))
+```
+
+```{r}
+
+# severance 일 때는 중복 뺄 필요 없음: total_df=rbind(df, test_df)
+# 2개의 dataframe 사이에 중복된 ID행 제거: https://goodtogreate.tistory.com/entry/sdf
+# df = df[ !(df$ID %in% test_df$ID), ] # NOT WORKING: total_df=unique(total_df, by="ID")
+# df
+
+```
+
+```{r}
+
+#######################################################################
+# R FUNCTION TO CALCULATE GREENWOOD-NAM-D'AGOSTINO CALIBRATION TEST FOR SURVIVAL MODEL
+# Most up-to date version of this code is available at http://ncook.bwh.harvard.edu/r-code.html
+# Author: Olga Demler, BWH, HMS
+# Version 2 - Updated 8/4/2015
+# FOR MORE DETAILS SEE Demler, Paynter, Cook "Tests of Calibration and Goodness of Fit 
+# in the Survival Setting" Stat Med 2015; 34(10):1659-80. PMID: 25684707
+# TO RUN:
+# GND.calib(pred,tvar,out,cens.t, groups, adm.cens)
+# PARAMETERS:
+# pred - PREDICTED PROBABILITIES OF AN EVENT CALCULATED FOR THE FIXED TIME WHICH IS THE SAME FOR ALL OBSERVATIONS (=adm.cens)
+# out  - OUTCOME 0/1 1=EVENT
+# cens.t - CENSORED/NOT CENSORED INDICATOR 1=CENSORED
+# groups - GROUPING ASSIGNMENT FOR EACH OBSERVATION
+# adm.cens - END OF STUDY TIME 
+# REQUIRES AT LEAST 2 EVENTS PER GROUP, AT LEAST 5 EVENTS PER GROUP IS RECOMMENDED
+# IF <2 EVENTS PER GROUP THEN QUITS
+#######################################################################
+kmdec=function(dec.num,dec.name, datain, adm.cens){
+  stopped=0
+  data.sub=datain[datain[,dec.name]==dec.num,]
+  if (sum(data.sub$out)>1){
+    avsurv=survfit(Surv(tvar,out) ~ 1, data=datain[datain[,dec.name]==dec.num,], error="g")
+    avsurv.est=ifelse(min(avsurv$time)<=adm.cens,avsurv$surv[avsurv$time==max(avsurv$time[avsurv$time<=adm.cens])],1)
+    
+    avsurv.stderr=ifelse(min(avsurv$time)<=adm.cens,avsurv$std.err[avsurv$time==max(avsurv$time[avsurv$time<=adm.cens])],0)
+    avsurv.stderr=avsurv.stderr*avsurv.est
+    
+    avsurv.num=ifelse(min(avsurv$time)<=adm.cens,avsurv$n.risk[avsurv$time==max(avsurv$time[avsurv$time<=adm.cens])],0)
+    
+  } else {
+    return(c(0,0,0,0,stopped=-1))
+  }
+  
+  if (sum(data.sub$out)<5) stopped=1
+  c(avsurv.est, avsurv.stderr, avsurv.num, dec.num, stopped) 
+}#kmdec
+
+GND.calib = function(pred, tvar, out, cens.t, groups, adm.cens){
+  
+  tvar.t=ifelse(tvar>adm.cens, adm.cens, tvar)
+  out.t=ifelse(tvar>adm.cens, 0, out)
+  
+  datause=data.frame(pred=pred, tvar=tvar.t, out=out.t, count=1, cens.t=cens.t, dec=groups)
+  numcat=length(unique(datause$dec))
+  groups=sort(unique(datause$dec))
+  
+  kmtab=matrix(unlist(lapply(groups,kmdec,"dec",datain=datause, adm.cens)),ncol=5, byrow=TRUE)
+  
+  if (any(kmtab[,5] == -1)) stop("Stopped because at least one of the groups contains <2 events. Consider collapsing some groups.")
+  else if (any(kmtab[,5] == 1)) warning("At least one of the groups contains < 5 events. GND can become unstable.\ 
+(see Demler, Paynter, Cook 'Tests of Calibration and Goodness of Fit in the Survival Setting' DOI: 10.1002/sim.6428) \
+Consider collapsing some groups to avoid this problem.")
+  
+  hltab=data.frame(group=kmtab[,4],
+                   totaln=tapply(datause$count,datause$dec,sum),
+                   censn=tapply(datause$cens.t,datause$dec,sum),
+                   numevents=tapply(datause$out,datause$dec,sum),
+                   expected=tapply(datause$pred,datause$dec,sum),
+                   kmperc=1-kmtab[,1], 
+                   kmvar=kmtab[,2]^2, 
+                   kmnrisk=kmtab[,3],
+                   expectedperc=tapply(datause$pred,datause$dec,mean))
+  
+  hltab$kmnum=hltab$kmperc*hltab$totaln
+  hltab$GND_component=ifelse(hltab$kmvar==0, 0,(hltab$kmperc-hltab$expectedperc)^2/(hltab$kmvar))
+  
+  print(hltab[c(1,2,3,4,10,5,6,9,7,11)], digits=4)
+  
+  c(df=numcat-1, chi2gw=sum(hltab$GND_component),pvalgw=1-pchisq(sum(hltab$GND_component),numcat-1))
+}#GND.calib
+```
+
+```{r}
+
+#read the data
+d<-flchain
+
+#we decided we are interested in calibration at 4000 days,
+#so censor after 4000
+adm.cens=4000
+d$fu.time <- pmin(d$futime, adm.cens)
+d$status <- ifelse(as.numeric(adm.cens < d$futime), 0, d$death)
+nonadm.cens=ifelse(d$fu.time<adm.cens & d$status==0,1,0)
+mean(d$status)
+
+#calculate predicted probability at pre-specified time (adm.cens)
+survcox_d<-coxph(data=d, Surv(fu.time, status)~age+sex+flc.grp+lambda)
+summary(survcox_d)
+survfit_d=survfit(survcox_d, newdata=d, se.fit=FALSE)
+survfit_d$surv
+
+survpr4K=survfit_d$surv[2120,]
+estsurv=survpr4K
+estinc=1-survpr4K
+
+#split into deciles
+d$dec=as.numeric(cut2(estinc, g=10))
+
+#check that there are 5 or more events in each group
+#if not then collapse groups
+table(d$dec, d$status)
+
+#calculate the GND test
+GND.result=GND.calib(pred=estinc, tvar=d$fu.time, out=d$status,
+                     cens.t=4000, groups=d$dec, adm.cens=4000)
+
+GND.result
+```
+
+``` {r}
+
+# Greenwood-Nam test
+# ref: https://github.com/bcjaeger/survival.calib 
+# --> (20220918) 이거 대신 https://ncook.bwh.harvard.edu/assets/GND_w_practical_example.R 보고 pred 만 그대로 df 데이터 프레임에 붙이기
+# experiment_root="/mnt/hdd/kschoi/GBM/SNUH_merged/experiment"
+# 
+# df_calib_dir=file.path(experiment_root, "LH_seq4_b16_mri_DenseNet_aug_s123456_b16_spl0.8_e25_all_long")
+# s
+# df_calib_path=file.path(df_calib_dir, 'df_calib_severance_test_11.csv')
+# df_calib = read.csv(df_calib_path, header=TRUE)[, -1] # header 와 index 열은 제거
+ 
+```
+
+``` {r}
+
+preproc <- function(df){
+  df = df %>% mutate(
+  EOR = ifelse(EOR %in% c('biopsy', 'partial', 'subtotal'), 'nontotal', 'total'), # 
+  EOR = factor(EOR),
+  MRI_avg_early = 1 * MRI1+
+                  1 * MRI2+
+                  1 * MRI3+
+                  1 * MRI4#+
+                  # 1 * MRI9
+  )
+return (df)
+}
+
+df <- preproc(df)
+test_df <- preproc(test_df)
+test_df$MRI_avg_early
+```
+```{r}
+
+get_cutoff_MRI <- function(df, MRI_feature){
+  
+  MRI_feature_stat <- maxstat.test(Surv(duration, event) ~ MRI_feature, data=df,smethod='LogRank', pmethod='exactGauss', abseps=0.01)
+  plot(MRI_feature_stat)
+  
+  MRI_feature_cutoff <- MRI_feature_stat$estimate
+  
+  return (MRI_feature_cutoff)
+}
+  
+cutoff <- get_cutoff_MRI(df, df$MRI_avg_early) # ERROR:그냥 MRI3라 쓰면 안되고 df$MRI3로 해야 함
+cutoff
+
+test_cutoff <- get_cutoff_MRI(test_df, test_df$MRI_avg_early)
+test_cutoff
+
+convert_MRI_bin <- function(df, MRI_feature, cutoff){
+    df = df %>% mutate(
+    MRI_feature_group = ifelse(MRI_feature<=cutoff, 0, 1),
+    MRI_feature_group = factor(MRI_feature_group)
+  )
+    return (df)
+}
+  
+df <- convert_MRI_bin(df, df$MRI_avg_early, cutoff) # df$MRI_avg_early
+
+```
+
+```{r}
+test_df$MRI_avg_early
+test_df <- convert_MRI_bin(test_df, test_df$MRI_avg_early, cutoff)
+test_df$MRI_feature_group
+```
+
+```{r}
+
+my_GND <- function(df){
+  
+  survcox_d <- coxph(Surv(duration, event) ~ MRI_avg_early, data=df, x = TRUE) # sex + age + IDH + MGMT + EOR
+  survfit_d=survfit(survcox_d, newdata=df, se.fit=FALSE)
+  
+  # survfit_d$surv
+  survpr4K=survfit_d$surv[66,]
+  estsurv=survpr4K
+  estinc=1-survpr4K
+
+  df$dec=as.numeric(cut2(estinc, g=2))
+
+  table(df$dec, df$event)
+  GND.result=GND.calib(pred=estinc, tvar=df$duration, out=df$event, cens.t=5000, groups=df$dec, adm.cens=5000)
+
+  GND.pvalue <- GND.result[["pvalgw"]]
+  GND.result
+  # return (survfit_d$surv)
+  return (GND.result)
+}
+
+# my_GND(test_df)
+
+survcox_d <- coxph(Surv(duration, event) ~ MRI_avg_early, data=df, x = TRUE)
+survfit_d=survfit(survcox_d, newdata=df, se.fit=FALSE)
+
+# survfit_d$surv
+# survpr4K=survfit_d$surv[66,]
+survpr4K=survfit_d$surv[488,]
+estsurv=survpr4K
+estinc=1-survpr4K
+
+df$dec=as.numeric(cut2(estinc, g=2))
+
+table(df$dec, df$event)
+GND.result=GND.calib(pred=estinc, tvar=df$duration, out=df$event, cens.t=5000, groups=df$dec, adm.cens=5000)
+
+GND.pvalue <- GND.result[["pvalgw"]]
+GND.result
+
+```
+
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ age + sex + MGMT + EOR, data=test_df, x = TRUE)
+summary(cox)
+```
+```{r}
+cox <- coxph(Surv(duration, event) ~ MRI_avg_early, data=test_df, x = TRUE)
+summary(cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ MRI_feature_group, data=test_df, x = TRUE)
+summary(cox)
+```
+```{r}
+cox <- coxph(Surv(duration, event) ~ sex + age + IDH + MGMT + EOR + MRI_avg_early, data=df, x = TRUE)
+summary(cox)
+
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ sex + age + IDH + MGMT + EOR + MRI_feature_group, data=df, x = TRUE)
+summary(cox)
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ sex + age + IDH + MGMT + EOR + MRI_avg_early, data=test_df, x = TRUE)
+summary(cox)
+
+test_pval <- my_GND(test_df) 
+test_pval
+```
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ sex + age + IDH + MGMT + EOR + MRI_feature_group, data=test_df, x = TRUE)
+summary(cox)
+```

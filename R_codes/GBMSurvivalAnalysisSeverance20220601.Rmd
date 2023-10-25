@@ -1,0 +1,184 @@
+---
+title: "GBMSurvival"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Package Loading
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(survival)
+library(ggfortify)
+# library(ranger)
+```
+
+## Data Loading
+
+```{r}
+csv_path = '/Users/jolee/Dropbox/!Papers/GBM/severance_clinical_vars_all.csv'
+GBM_df = read.csv(csv_path)
+print(nrow(GBM_df))
+GBM_df %>% head()
+```
+
+## Exploring Data
+```{r}
+check_nine <- function (arg) {
+  return(sum(arg == 9))
+}
+  
+summarize_all(GBM_df, check_nine)
+```
+
+## Preprocessing Data
+```{r}
+GBM_df$sex <- GBM_df$sex %>% as.factor()
+
+na_idx <- GBM_df$MGMT == 9 
+GBM_df$MGMT[na_idx] = NA
+
+na_idx <- GBM_df$IDH == 9 
+GBM_df$IDH[na_idx] = NA
+
+na_idx <- GBM_df$duration > 3500
+GBM_df$duration[na_idx] = NA
+
+GBM_df$MGMT <- GBM_df$MGMT %>% as.factor()
+GBM_df$IDH <- GBM_df$IDH %>% as.factor()
+GBM_df$EOR <- GBM_df$EOR %>% as.factor()
+
+summary(GBM_df)
+```
+
+```{r}
+df <- GBM_df %>% drop_na()
+summary(df)
+```
+
+## Kaplan Meiyer Plot
+```{r}
+km_fit <- survfit(Surv(duration, event) ~ 1, data=df)
+summary(km_fit, times = c(1,30,60,90*(1:10)))
+```
+
+```{r}
+autoplot(km_fit)
+```
+```{r}
+colnames(df)
+```
+
+```{r}
+km_idh_fit <- survfit(Surv(duration, event) ~ IDH, data=df)
+# km_x1p_fit <- survfit(Surv(duration, event) ~ X1p19q, data=df)
+# km_atrx_fit <- survfit(Surv(duration, event) ~ ATRX, data=df)
+km_mgmt_fit <- survfit(Surv(duration, event) ~ MGMT, data=df)
+km_sex_fit <- survfit(Surv(duration, event) ~ sex, data=df)
+
+autoplot(km_idh_fit, conf.int=TRUE, main='IDH')
+# autoplot(km_x1p_fit, conf.int=TRUE, main='X1p19q')
+# autoplot(km_atrx_fit, conf.int=TRUE, main='ATRX')
+autoplot(km_mgmt_fit, conf.int=TRUE, main='MGMT')
+autoplot(km_sex_fit, conf.int=TRUE, main='sex')
+```
+
+```{r}
+df['age_group'] <- df$age %>% cut(c(0,30,50,70,100))
+km_sex_fit <- survfit(Surv(duration, event) ~ age_group, data=df)
+autoplot(km_sex_fit, conf.int=TRUE, main='age_group')
+```
+
+## Cox Hazard Model
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ sex + age + IDH + MGMT, data=df, x = TRUE)
+summary(cox)
+cox_fit <- survfit(cox)
+#plot(cox_fit, main = "cph model", xlab="Days")
+autoplot(cox_fit)
+```
+```{r}
+cox <- coxph(Surv(duration, event) ~ IDH + MGMT + age, data=df, x = TRUE)
+summary(cox)
+```
+```{r}
+BIC(cox)
+cox.zph(cox)
+```
+
+
+
+```{r}
+# vars = c('sex', 'age', 'IDH', 'X1p19q', 'ATRX', 'MGMT')
+
+combinations = expand.grid(c('1', 'sex'),c('1', 'age'),c('1', 'IDH'),c('1', 'MGMT'),c('1', 'EOR'))
+
+get_all_values_of_row_as_char <- function(row){
+  values = c()
+  columns = colnames(row)
+  for (col in columns){
+    values = c(values, as.character(row[1,col]))
+  }
+  return(values)
+}
+
+get_formula_string <- function(row){
+  formula_string = 'Surv(duration, event) ~'
+  vars = get_all_values_of_row_as_char(row)
+  vars_string = paste(vars, collapse = '+')
+  formula_string = paste(formula_string, vars_string)
+  return(formula_string)
+}
+
+make_cox_from_row <- function(row){
+  cox = coxph(as.formula(get_formula_string(row)), data=df)
+  return(cox)
+}
+
+# With BIC
+
+combination_string = c()
+BIC_values = c()
+
+for(i in 1:nrow(combinations)){
+  row <- combinations[i,]
+  cox <- make_cox_from_row(row)
+  vars <- get_all_values_of_row_as_char(row)
+  vars_string <- paste(vars, collapse = ' ')
+  combination_string <- c(combination_string, vars_string)
+  BIC_values <- c(BIC_values, BIC(cox))
+}
+
+bic_result = data.frame(vars = combination_string, BIC=BIC_values)
+bic_result %>% head()
+min_idx = which.min(bic_result$BIC)
+print('Best Model: ')
+cat(bic_result[min_idx,1])
+```
+```{r}
+# Using AIC 
+combination_string = c()
+AIC_values = c()
+
+for(i in 1:nrow(combinations)){
+  row <- combinations[i,]
+  cox <- make_cox_from_row(row)
+  vars <- get_all_values_of_row_as_char(row)
+  vars_string <- paste(vars, collapse = ' ')
+  combination_string <- c(combination_string, vars_string)
+  AIC_values <- c(AIC_values, AIC(cox))
+}
+
+aic_result = data.frame(vars = combination_string, AIC=AIC_values)
+aic_result %>% head()
+min_idx = which.min(aic_result$AIC)
+print('Best Model: ')
+cat(aic_result[min_idx,1])
+```
+
+
