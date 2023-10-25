@@ -1,0 +1,98 @@
+---
+title: "PredictValidDataset"
+author: "JOLEE"
+date: "12/28/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Import Libraries
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(survival)
+library(ggfortify)
+```
+
+## Import Datasets
+
+```{r}
+train_csv_path = '//Users/jolee/Dropbox/!Papers/GBM/SNUH_merged_prediction_and_label_selected_fix.csv'
+val_csv_path = '/Users/jolee/Dropbox/!Papers/GBM/SNUH_temporal_survival_curated_final.csv'
+test_csv_path = '/Users/jolee/Dropbox/!Papers/GBM/severance_prediction_and_label_selected_with_EOR.csv'
+train_df = read.csv(train_csv_path)
+val_df = read.csv(val_csv_path)
+test_df = read.csv(test_csv_path)
+train_df %>% head()
+val_df %>% head()
+test_df %>% head()
+
+NA_index = which(train_df$EOR == '')
+train_df <- train_df[-c(NA_index),]
+```
+
+## Preprocess Datasets
+
+```{r}
+na_idx <- train_df$IDH == 9 
+train_df$IDH[na_idx] = NA
+
+na_idx <- train_df$MGMT == 9 
+train_df$MGMT[na_idx] = NA
+
+train_df$sex <- train_df$sex %>% as.factor()
+train_df$MGMT <- train_df$MGMT %>% as.factor()
+train_df$IDH <- train_df$IDH %>% as.factor()
+train_df <- train_df %>% drop_na()
+
+na_idx <- val_df$IDH == 9 
+val_df$IDH[na_idx] = NA
+
+na_idx <- val_df$MGMT == 9 
+val_df$MGMT[na_idx] = NA
+
+val_df$sex <- (val_df$sex - 1) %>% as.factor()
+val_df$MGMT <- val_df$MGMT %>% as.factor()
+val_df$IDH <- val_df$IDH %>% as.factor()
+val_df <- val_df %>% drop_na()
+
+test_df$sex <- test_df$sex %>% as.factor()
+test_df$MGMT <- test_df$MGMT %>% as.factor()
+test_df$IDH <- test_df$IDH %>% as.factor()
+
+na_idx <- test_df$duration > 4000
+test_df$duration[na_idx] = NA
+test_df <- test_df %>% drop_na()
+
+summary(test_df)
+```
+
+```{r}
+km_fit <- survfit(Surv(duration, event) ~ 1, data=test_df)
+summary(km_fit, times = c(1,30,60,90*(1:10)))
+```
+
+```{r echo=FALSE}
+autoplot(km_fit)
+```
+
+
+```{r}
+cox <- coxph(Surv(duration, event) ~ IDH + MGMT + age + sex, data=train_df, x = TRUE)
+concordance(cox)
+# concordance(cox, newdata = val_df)
+concordance(cox, newdata = test_df)
+```
+
+```{r}
+library(pec)
+# reference로는 KM prediction이랑 비교했다고 함. 
+cox <- coxph(Surv(duration, event) ~ IDH + sex + age + MGMT, data=train_df, x = TRUE)
+pec(cox)
+pec(cox, data=val_df)
+pec(cox, data=test_df)
+```
