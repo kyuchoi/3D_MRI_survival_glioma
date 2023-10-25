@@ -30,10 +30,9 @@ The developed 3-types based network, *'Squeeze-and-Excitation ResNeXt'*, *'Dense
 
 ### Composition (File in Docker images)  
 
-```1. main_copy.py, train_inference_copy.py, data (UCSF,TCGA,UPenn), utils_copy.py, attention_models.py, Preprocess (1 bash file, 1 python file)```  
+```1.``` main_copy.py, train_inference_copy.py, data (UCSF,TCGA,UPenn), utils_copy.py, attention_models.py, Preprocess (1 bash file, 1 python file)  
   
-
-```2. main_copy.py, train_inference_copy.py, inference_copy.py, utils_copy.py, attention_models.py, data (UCSF,TCGA,UPenn), preprocess (1 bash file, 1 python file)```
+```2.``` main_copy.py, train_inference_copy.py, inference_copy.py, utils_copy.py, attention_models.py, data (UCSF,TCGA,UPenn), preprocess (1 bash file, 1 python file)
 
 
 ## Use (Docker)
@@ -82,10 +81,10 @@ Second
 Third
 
 
-```1.``` You must load your data in container.
+```3-1.``` You must load your data in container.
 
 
-```2.``` Have to load a label of data (duration,event) in container.  
+```3-2.``` Have to load a label of data (duration,event) in container.  
 
 
 Fourth
