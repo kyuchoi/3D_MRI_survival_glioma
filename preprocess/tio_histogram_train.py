@@ -8,8 +8,6 @@ import argparse
 from datetime import datetime
 import torchio as tio
 
-''' histogram standardization for each of sequence after bet + coreg + seg + resample + resize (2mm) 까지 하고 나서 돌리기 '''
-
 start_time = datetime.now()
   
 def get_args_parser(add_help=True):
