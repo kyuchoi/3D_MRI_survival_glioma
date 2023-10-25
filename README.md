@@ -47,18 +47,18 @@ Second
 Third
 
 
-* Run main_copy.py
+3-1. Run main_copy.py
 
     python main_copy.py 
 
 
-* Run train_inference_copy.py
+3-2. Run train_inference_copy.py
 
     python train_inference_copy.py
 
-* main_copy.py -> input_args : --gpu_id, --test_gpu_id, --epochs, --seed, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --ext_dataset_name, --dataset_list,
+main_copy.py -> input_args : --gpu_id, --test_gpu_id, --epochs, --seed, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --ext_dataset_name, --dataset_list,
 
-* train_inference_copy.py -> inpurt args : --gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
+train_inference_copy.py -> inpurt args : --gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
 
 
 #### if you want to use a custom version,
@@ -68,16 +68,22 @@ First
     
     docker pull snuhradaicon/gbl_surv_custom:snuhradaicon
 
+
 Second
     
     docker run --gpus all -it snuhradaicon/gbl_surv_custom:snuhradaicon
 
+
 Third
+
 
 
 3-1. You must load your data in container.
 
+
+
 3-2. Have to load a label of data (duration,event) in container.
+
 
 
 Fourth (Preprocess)
@@ -112,8 +118,4 @@ Fifth
 
     python inference_copy.py
 
-* main_copy.py -> input_args : --gpu_id, --test_gpu_id, --epochs, --seed, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --ext_dataset_name, --dataset_list,
-
-* train_inference_copy.py -> inpurt args : --gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
-
-* inference_copy.py -> inpurt args : --test_gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
+inference_copy.py -> inpurt args : --test_gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
