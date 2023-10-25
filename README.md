@@ -3,6 +3,14 @@
 
 The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **DenseNet**, **Resnet-Convolutional Block Attention Module**), *'CustomNet'* extracts spatial features from preoperative ```whole-brain MRI images```. It aims to quantitatively evaluate ```the additional value of these imaging features as prognostic factors```, independently from well-established clinical and pathological prognostic factors, for adult-type gliomas.
 
+
+## Requirements
+Python3 (Anaconda) with following packages:
+
+    pytorch >= cuda 11.4 version
+
+MUST install <https://pytorch.org/>
+
 ## Directories Structure
 
     3D_MRI_survival_glioma
@@ -19,21 +27,14 @@ The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **Dense
         ├─resample
         └─skull_strip_coreg
 
-```3D grad CAM``` is applied to Preoperative MRI using 3D CNN Deep Learning Model for Adult-type Diffuse Gliomas
+```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas
 
 ## Docker images (images:tag)
 1. snuhradaicon/gbl_surv_distribution:snuhradaicon (released version)  
   
 
 2. snuhradaicon/gbl_surv_custom:snuhradaicon (custom version)
-
-
-### Composition (File in Docker images)  
-
-```1.``` main_copy.py, train_inference_copy.py, data (UCSF,TCGA,UPenn), utils_copy.py, attention_models.py, Preprocess (1 bash file, 1 python file)  
   
-```2.``` main_copy.py, train_inference_copy.py, inference_copy.py, utils_copy.py, attention_models.py, data (UCSF,TCGA,UPenn), preprocess (1 bash file, 1 python file)
-
 
 ## Use (Docker)
 #### if you want to use a released version,
@@ -94,7 +95,7 @@ Fourth
 
     sh skull_strip_coreg.sh [root_dir] [--input_dir] [input_dir]
     
-* if you don't run a sh file, ```Ref``` : <https://github.com/NeuroAI-HD/HD-GLIO>
+* if you don't run a sh file, <https://github.com/NeuroAI-HD/HD-GLIO>
 
 
 ```4-2.``` Run resample.py
