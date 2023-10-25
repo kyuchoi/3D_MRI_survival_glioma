@@ -61,9 +61,12 @@ Third
 
     python train_inference_copy.py
 
-**main_copy.py (input_args)** : --gpu_id, --test_gpu_id, --epochs, --seed, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --ext_dataset_name, --dataset_list,
 
-**train_inference_copy.py (input_args)** : --gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
+**Dataset : UCSF, UPenn, TCGA**
+
+```main_copy.py (input_args)``` : --gpu_id, --test_gpu_id, --epochs, --seed, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --ext_dataset_name, --dataset_list
+
+```train_inference_copy.py (input_args)``` : --gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
 
 
 #### if you want to use a custom version,  
@@ -120,4 +123,6 @@ Fifth
 
     python inference_copy.py
 
-**inference_copy.py (input args)** : --test_gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
+**Dataset : UCSF, UPenn, TCGA**
+
+```inference_copy.py (input args)``` : --test_gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
