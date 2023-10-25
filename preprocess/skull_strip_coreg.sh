@@ -1,7 +1,7 @@
 #!/bin/sh
 ### ref: https://github.com/NeuroAI-HD/HD-GLIO
 
-root_dir=/mnt/hdd3/mskim/GBL/data/$2 # SNUH_merged # SNUH_temporal # severance # TCGA_GBM #
+root_dir=/mnt/hdd3/mskim/GBL/data/$2 
 input_dir=${root_dir}/nifti_raw
 # resized_bhk
 target_dir=${root_dir}/no_hd_glio
