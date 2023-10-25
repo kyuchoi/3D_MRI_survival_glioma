@@ -49,12 +49,12 @@ Second
 Third  
   
 
-3-1. Run main_copy.py
+```3-1.``` Run main_copy.py
 
     python main_copy.py 
   
 
-3-2. Run train_inference_copy.py
+```3-2.``` Run train_inference_copy.py
 
     python train_inference_copy.py
 
@@ -79,23 +79,23 @@ Second
 Third
 
 
-```3-1. You must load your data in container.```
+```1. You must load your data in container.```
 
 
-```3-2. Have to load a label of data (duration,event) in container.```  
+```2. Have to load a label of data (duration,event) in container.```  
   
 
-Fourth (Preprocess)
+Fourth
 
 
-4-1. Run skull_strip_coreg.sh
+```4-1.``` Run skull_strip_coreg.sh
 
     sh skull_strip_coreg.sh [root_dir] [--input_dir] [input_dir]
     
 * if you don't run a sh file, ```Ref``` : <https://github.com/NeuroAI-HD/HD-GLIO>
 
 
-4-2. Run resample.py
+```4-2.``` Run resample.py
 
     python resample.py [--fix_sequence] [--resize_type] [--dataset_name] [--root_dir]
   
@@ -103,17 +103,17 @@ Fourth (Preprocess)
 Fifth
 
 
-5-1. Run python main_copy.py
+```5-1.``` Run python main_copy.py
 
     python main_copy.py
  
 
-5-2. Run python train_inference_copy.py
+```5-2.``` Run python train_inference_copy.py
 
     python train_inference_copy.py
 
 
-5-3. Run python inference_copy.py
+```5-3.``` Run python inference_copy.py
 
     python inference_copy.py
 
