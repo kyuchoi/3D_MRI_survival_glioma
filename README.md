@@ -64,34 +64,35 @@ Second
     docker run --gpus all -it snuhradaicon/gbl_surv_custom:snuhradaicon
 
 Third
-1.You must load data in container
+
+1. You must load data in container
  
-2.Preprocess
+2. Preprocess
  
-2-1.Run skull_strip_coreg.sh
+2-1. Run skull_strip_coreg.sh
 
     sh skull_strip_coreg.sh [root_dir] [--input_dir] [input_dir]
 
-    * input_arg : $1 Real root_dir $2 --input_dir (string) $3 your Real input_dir (Sub-directory of root_dir )
+* input_arg : $1 Real root_dir $2 --input_dir (string) $3 your Real input_dir (Sub-directory of root_dir )
     
-    * if you don't run a sh file, ref: <https://github.com/NeuroAI-HD/HD-GLIO>
+* if you don't run a sh file, ref: <https://github.com/NeuroAI-HD/HD-GLIO>
 2-2.Run resample.py
 
     python resample.py [--fix_sequence] [--resize_type] [--dataset_name] [--root_dir]
 
-    * input_arg : --fix_sequence, --resize_type(defalut:BraTS), --dataset_name, --root_dir
+* input_arg : --fix_sequence, --resize_type(defalut:BraTS), --dataset_name, --root_dir
  
 3. Run python main_copy.py
 
-    python main_copy.py
+        python main_copy.py
  
 4. Run python train_inference_copy.py
  
-    python train_inference_copy.py
+        python train_inference_copy.py
 
 5. Run python inference_copy.py
 
-    python inference_copy.py
+        python inference_copy.py
 
 * main_copy.py -> input_args : --gpu_id, --test_gpu_id, --epochs, --seed, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --ext_dataset_name, --dataset_list,
 
