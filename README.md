@@ -39,17 +39,17 @@ MUST install <https://pytorch.org/>
 
 ## Grad-CAM visualization for model interpretation in the following representative case
 
-![Alt text](flair-1.gif)
+![Alt text]("C:\Users\user\Downloads\flair.gif")
 
 ## Kaplan‒Meier curves of the low-risk group and high-risk group stratified according to DPI 
 
 **(a) External test set 1**
 
-![Alt text](image.png)
+![Alt text]("C:\Users\user\Desktop\ext_1.png")
 
 **(b) External test set 2**
 
-![Alt text](image-1.png)
+![Alt text]("C:\Users\user\Desktop\ext_2.png)
 
 ## Docker images (images:tag)
 1. snuhradaicon/gbl_surv_distribution:snuhradaicon (released version)  
