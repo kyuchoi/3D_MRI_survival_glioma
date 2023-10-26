@@ -45,15 +45,13 @@ MUST install <https://pytorch.org/>
 ```Figure 1.``` The model correctly predicted no death within a year (DPI, 0.483). Both enhancing tumor and surrounding nonenhancing tumor areas were attended, as shown in the overlay on (a) 3D postcontrast T1-weighted and (b) T2 FLAIR images.
 
 
-<img src="https://github.com/immsk1997/image/blob/master/brain1.jpg" width="128" height="128">
-<img src="https://github.com/immsk1997/image/blob/master/cam1.jpg" width="128" height="128">
+<img src="https://github.com/immsk1997/image/blob/master/brain1.jpg" width="128" height="128">  <img src="https://github.com/immsk1997/image/blob/master/cam1.jpg" width="128" height="128">
 
 
 ```Figure 2.``` The model correctly predicted no death within a year (DPI, 0.479). The tumor showed only subtle enhancement, and relatively T2 hypointense nonenhancing tumor areas were shown as active in the Grad-CAM overlay on (a) 3D postcontrast T1-weighted and (b) T2 FLAIR images.
 
 
-<img src="https://github.com/immsk1997/image/blob/master/brain2.jpg" width="128" height="128">  
-<img src="https://github.com/immsk1997/image/blob/master/cam2.jpg" width="128" height="128">
+<img src="https://github.com/immsk1997/image/blob/master/brain2.jpg" width="128" height="128">  <img src="https://github.com/immsk1997/image/blob/master/cam2.jpg" width="" height="128">
 
 
 ## Kaplan‒Meier curves of the low-risk group and high-risk group stratified according to DPI 
