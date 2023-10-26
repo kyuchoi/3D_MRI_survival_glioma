@@ -15,9 +15,16 @@ MUST install <https://pytorch.org/>
 
     3D_MRI_survival_glioma
     ├─3D grad CAM
+    ├─data
+    │  ├─TCGA
+    │  │  └─resized_BraTS
+    │  ├─UCSF
+    │  │  └─resized_BraTS
+    │  └─UPenn
+    │      └─resized_BraTS
     ├─model
-    │  ├─attention_models
-    │  ├─deep_surv_image_only_attention
+    │  ├─attention_model
+    │  ├─deep_survival_image_only_attention
     │  ├─grad_CAM
     │  ├─inference
     │  ├─main
@@ -25,9 +32,24 @@ MUST install <https://pytorch.org/>
     │  └─utils
     └─preprocess
         ├─resample
-        └─skull_strip_coreg
+        ├─skull_strip_coreg
+        └─tio_histogram
 
-```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas
+```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas  
+
+## Grad-CAM visualization for model interpretation in the following representative case
+
+![Alt text](flair-1.gif)
+
+## Kaplan‒Meier curves of the low-risk group and high-risk group stratified according to DPI 
+
+**(a) External test set 1**
+
+![Alt text](image.png)
+
+**(b) External test set 2**
+
+![Alt text](image-1.png)
 
 ## Docker images (images:tag)
 1. snuhradaicon/gbl_surv_distribution:snuhradaicon (released version)  
@@ -126,3 +148,4 @@ Fifth
 **Dataset : UCSF, UPenn, TCGA**
 
 ```inference_copy.py (input args)``` : --test_gpu_id, --spec_patho (all,GBL), --spec_duration (OS,1yr), --spec_event (death), --dataset_list (* you must pass same args when run main_copy.py)
+
