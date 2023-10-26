@@ -2,7 +2,7 @@
 *Official repository* for *Added Prognostic Value of 3D Deep Learning-Derived Features from Preoperative MRI for Adult-type Diffuse Gliomas* (Neuro Oncol
 . 2023 Oct 19:noad202. doi: 10.1093/neuonc/noad202. https://pubmed.ncbi.nlm.nih.gov/37855826/)
 
-The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **DenseNet**, **Resnet-Convolutional Block Attention Module**), *'CustomNet'* extracts spatial features from preoperative ```whole-brain MRI images```. It aims to quantitatively evaluate ```the additional value of these imaging features as prognostic factors```, independently from well-established clinical and pathological prognostic factors, for adult-type gliomas.
+The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **DenseNet**, **Resnet-Convolutional Block Attention Module**), *'DeepSurvGlioma'* extracts spatial features from preoperative ```whole-brain MRI images```. It aims to quantitatively evaluate ```the additional value of these imaging features as prognostic factors```, independently from well-established clinical and pathological prognostic factors, for adult-type gliomas.
 
 ### Grad-CAM visualization for model interpretation in the following representative case
 
