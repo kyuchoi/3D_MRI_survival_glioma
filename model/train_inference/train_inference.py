@@ -21,12 +21,6 @@ import torch.nn.functional as F
 import monai
 from monai.networks.nets import *
 
-# import pycox
-# from pycox.models import * # LogisticHazard, DeepHitSingle, PMF
-# from pycox.evaluation import * # EvalSurv
-# from pycox.utils import * # kaplan_meier
-# from torchtuples.callbacks import Callback
-
 from utils import *
 from attention_models import *
 
@@ -38,12 +32,6 @@ from lifelines.utils import concordance_index
 from sklearn.utils import resample
 import argparse
 import json
-
-''' 
-USAGE: 
-python train_inference.py --spec_patho all --dataset_list SNUH UPenn severance 
---> main.py 돌릴 때와 동일한 args 를 입력해줘야 함
-'''
 
 args = config()
 
@@ -89,13 +77,11 @@ print(f'train_df.index:{train_df.index}')
 print(f'train_df.shape:{train_df.shape}')
 
 train_transform = get_transform(args, f'{args.dataset_name}')
-#%%
 
 to_np = lambda x: x.detach().cpu().numpy()
-# get_label_path = lambda dataset_name: os.path.join(args.label_dir, f'{dataset_name}_labels{args.use_correct}.csv')
 get_label_path = lambda dataset: os.path.join(args.label_dir, f'{dataset}_{infer_args.spec_duration}_{infer_args.spec_patho}_{infer_args.spec_event}.csv')
 
-get_target = lambda df: (np.array(df.index.values, dtype=str), # int: not working
+get_target = lambda df: (np.array(df.index.values, dtype=str), 
                           np.array(df[f'duration_{infer_args.spec_event}'].tolist(), dtype=int), 
                           np.array(df[f'event_{infer_args.spec_event}'].tolist(), dtype=int))
 
@@ -107,31 +93,25 @@ df = pd.read_csv(get_label_path(f'{args.dataset_name}'), dtype='string')
 df = df.set_index('ID')
 train_df = df.loc[train_idx]
 _, duration_train, event_train = get_target(train_df)
-#%%
+
 oneyr_survs_train = []
 for inputs,labels in train_loader:
   model.eval()
   inputs = inputs.to(device)
   labels = labels.to(device)
 
-  y_pred = model(inputs) # torch.Size([16, 19])
+  y_pred = model(inputs) 
   
   print(f'y_pred:{y_pred}')
   print(f'labels:{labels}')
   
-  ''' evaluate c-index 
-  ref:
-  https://lifelines.readthedocs.io/en/latest/lifelines.utils.html
-  https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=cjh226&logNo=221380929786
-  '''
-
   halflife=365.*2
   breaks=-np.log(1-np.arange(0.0,0.96,0.05))*halflife/np.log(2) 
   y_pred_np = to_np(y_pred)
   oneyr_surv_train=np.cumprod(y_pred_np[:,0:np.nonzero(breaks>365)[0][0]], axis=1)[:,-1]
   print(f'oneyr_surv_train: {oneyr_surv_train}')
   oneyr_survs_train.extend(oneyr_surv_train)
-# print(len(oneyr_survs)) # 66
+
 oneyr_survs_train = np.array(oneyr_survs_train)
 
 original_c_index, ci_lower, ci_upper = bootstrap_cindex(duration_train, oneyr_survs_train, event_train)
