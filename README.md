@@ -41,7 +41,7 @@ MUST install <https://pytorch.org/>
     ├─3D grad CAM
     ├─data
     │  ├─label
-    │    └─surv_labels
+    │  │  └─surv_labels
     │  ├─TCGA
     │  │  └─resized_BraTS
     │  ├─UCSF
