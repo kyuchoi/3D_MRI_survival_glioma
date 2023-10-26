@@ -4,6 +4,30 @@
 
 The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **DenseNet**, **Resnet-Convolutional Block Attention Module**), *'CustomNet'* extracts spatial features from preoperative ```whole-brain MRI images```. It aims to quantitatively evaluate ```the additional value of these imaging features as prognostic factors```, independently from well-established clinical and pathological prognostic factors, for adult-type gliomas.
 
+### Grad-CAM visualization for model interpretation in the following representative case
+
+
+```Figure 1``` The model correctly predicted no death within a year (DPI, 0.483). Both enhancing tumor and surrounding nonenhancing tumor areas were attended, as shown in the overlay on (a) 3D postcontrast T1-weighted and (b) T2 FLAIR images.
+
+
+<img src="https://github.com/immsk1997/image/blob/master/brain1.jpg" width="128" height="128">  <img src="https://github.com/immsk1997/image/blob/master/cam1.jpg" width="128" height="128">
+
+
+```Figure 2``` The model correctly predicted no death within a year (DPI, 0.479). The tumor showed only subtle enhancement, and relatively T2 hypointense nonenhancing tumor areas were shown as active in the Grad-CAM overlay on (a) 3D postcontrast T1-weighted and (b) T2 FLAIR images.
+
+
+<img src="https://github.com/immsk1997/image/blob/master/brain2.jpg" width="128" height="128">  <img src="https://github.com/immsk1997/image/blob/master/cam2.jpg" width="" height="128">
+
+
+### Kaplan‒Meier curves of the low-risk group and high-risk group stratified according to DPI 
+
+**(a) External test set 1**
+
+<img src="https://github.com/immsk1997/image/blob/master/image.png" width="650" height="350">
+
+**(b) External test set 2**
+
+<img src="https://github.com/immsk1997/image/blob/master/image-1.png" width="650" height="350">
 
 ## Requirements
 Python3 (Anaconda) with following packages:
@@ -16,9 +40,18 @@ MUST install <https://pytorch.org/>
 
     3D_MRI_survival_glioma
     ├─3D grad CAM
+    ├─data
+    │  ├─label
+    │  │  └─surv_labels
+    │  ├─TCGA
+    │  │  └─resized_BraTS
+    │  ├─UCSF
+    │  │  └─resized_BraTS
+    │  └─UPenn
+    │      └─resized_BraTS
     ├─model
-    │  ├─attention_models
-    │  ├─deep_surv_image_only_attention
+    │  ├─attention_model
+    │  ├─deep_survival_image_only_attention
     │  ├─grad_CAM
     │  ├─inference
     │  ├─main
@@ -26,9 +59,10 @@ MUST install <https://pytorch.org/>
     │  └─utils
     └─preprocess
         ├─resample
-        └─skull_strip_coreg
+        ├─skull_strip_coreg
+        └─tio_histogram
 
-```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas
+```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas  
 
 ## Docker images (images:tag)
 1. snuhradaicon/gbl_surv_distribution:snuhradaicon (released version)  
@@ -53,12 +87,12 @@ Second
 Third  
   
 
-```3-1.``` Run main_copy.py
+```3-1``` Run main_copy.py
 
     python main_copy.py 
   
 
-```3-2.``` Run train_inference_copy.py
+```3-2``` Run train_inference_copy.py
 
     python train_inference_copy.py
 
@@ -86,23 +120,23 @@ Second
 Third
 
 
-```3-1.``` You must load your data in container.
+```3-1``` You must load your data in container.
 
 
-```3-2.``` Have to load a label of data (duration,event) in container.  
+```3-2``` Have to load a label of data (duration,event) in container.  
 
 
 Fourth
 
 
-```4-1.``` Run skull_strip_coreg.sh
+```4-1``` Run skull_strip_coreg.sh
 
     sh skull_strip_coreg.sh [root_dir] [--input_dir] [input_dir]
     
 * if you don't run a sh file, <https://github.com/NeuroAI-HD/HD-GLIO>
 
 
-```4-2.``` Run resample.py
+```4-2``` Run resample.py
 
     python resample.py [--fix_sequence] [--resize_type] [--dataset_name] [--root_dir]
   
@@ -110,17 +144,17 @@ Fourth
 Fifth
 
 
-```5-1.``` Run python main_copy.py
+```5-1``` Run python main_copy.py
 
     python main_copy.py
  
 
-```5-2.``` Run python train_inference_copy.py
+```5-2``` Run python train_inference_copy.py
 
     python train_inference_copy.py
 
 
-```5-3.``` Run python inference_copy.py
+```5-3``` Run python inference_copy.py
 
     python inference_copy.py
 

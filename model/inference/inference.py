@@ -21,12 +21,6 @@ import torch.nn.functional as F
 import monai
 from monai.networks.nets import *
 
-# import pycox
-# from pycox.models import * # LogisticHazard, DeepHitSingle, PMF
-# from pycox.evaluation import * # EvalSurv
-# from pycox.utils import * # kaplan_meier
-# from torchtuples.callbacks import Callback
-
 from utils import *
 from attention_models import *
 
@@ -38,12 +32,6 @@ from lifelines.utils import concordance_index
 from sklearn.utils import resample
 import argparse
 import json
-
-''' 
-USAGE: 
-python inference.py --spec_patho all --dataset_list SNUH UPenn severance 
---> main.py 돌릴 때와 동일한 args 를 입력해줘야 함
-'''
 
 args = config()
 
@@ -57,7 +45,6 @@ def get_args_parser():
     parser.add_argument('--spec_duration', type=str, default='1yr') # 'OS' # 
     parser.add_argument('--spec_event', type=str, default='death') # 'prog' # 
     parser.add_argument('--dataset_list', nargs='+', default=['UCSF','UPenn','TCGA','severance'], help='selected_training_datasets') # ,'TCGA'# ['SNUH','UPenn','TCGA']
-    # parser.add_argument('--remove_idh_mut', action='store_true', help='for subgroup analysis of IDH-wt, removing IDH-mut')
     return parser
 
 infer_args = get_args_parser().parse_args()
@@ -118,12 +105,6 @@ for inputs,labels in valid_loader:
   y_pred = model(inputs) # torch.Size([16, 19])
   print(f'y_pred:{y_pred}')
   print(f'labels:{labels}')
-  
-  ''' evaluate c-index 
-  ref:
-  https://lifelines.readthedocs.io/en/latest/lifelines.utils.html
-  https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=cjh226&logNo=221380929786
-  '''
 
   halflife=365.*2
   breaks=-np.log(1-np.arange(0.0,0.96,0.05))*halflife/np.log(2) 
@@ -133,7 +114,7 @@ for inputs,labels in valid_loader:
   # oneyr_surv_valid = nnet_pred_surv(y_pred_np, breaks, 365)
   oneyr_surv_valid = np.cumprod(y_pred_np[:,0:np.nonzero(breaks>365)[0][0]], axis=1)[:,-1]
   oneyr_survs_valid.extend(oneyr_surv_valid)
-# print(len(oneyr_survs)) # 66
+
 oneyr_survs_valid = np.array(oneyr_survs_valid)
 
 original_c_index, ci_lower, ci_upper = bootstrap_cindex(duration_valid, oneyr_survs_valid, event_valid)
@@ -142,8 +123,3 @@ print(f'Original C-index for valid: {original_c_index:.4f}')
 print(f'95% CI for C-index for valid: ({ci_lower:.4f}, {ci_upper:.4f})')
 
 score_valid = get_BS(event_valid, duration_valid, oneyr_survs_valid)
-#%%
-
-''' DL score 구하기 '''
-
-# get_DL_score(x_test, id_list = EXT_IDLIST, dataframe = ext_df, dataset = EXT_DATASET_NAME)

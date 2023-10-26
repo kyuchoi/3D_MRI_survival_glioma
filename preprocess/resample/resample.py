@@ -37,15 +37,14 @@ SEQUENCE = ['t1ce', 'flair', 't1', 't2']
 ROOT_DIR = args.root_dir
 DATA_DIR = os.path.join(ROOT_DIR, DATASET_NAME)
 INPUT_DIR = os.path.join(DATA_DIR, 'no_hd_glio')
-OUTPUT_DIR = os.path.join(DATA_DIR, f'resampled_{RESIZE_TYPE}') #_no_hd_glio')
-RESIZE_DIR = os.path.join(DATA_DIR, f'resized_{RESIZE_TYPE}') #_no_hd_glio')
+OUTPUT_DIR = os.path.join(DATA_DIR, f'resampled_{RESIZE_TYPE}')
+RESIZE_DIR = os.path.join(DATA_DIR, f'resized_{RESIZE_TYPE}') 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(RESIZE_DIR, exist_ok=True)
 
 GET_DIR_LIST = lambda PATH: sorted([DIR for DIR in os.listdir(PATH) if os.path.isdir(os.path.join(PATH, DIR))])
-crop_z_bottom = 15 # better than 20 for SNUH_merged
+crop_z_bottom = 15 
 
-#%%
 ''' get subjects with all sequences (i.e. t1, t2, t1ce, flair) before resampling '''
 
 
@@ -69,13 +68,6 @@ for subject in tqdm(GET_DIR_LIST(INPUT_DIR)):
     else:
         print(f'{subject}: no complete sequences')
         incomplete_subjs.append(subject)
-
-# incomplete_subjs = np.array(incomplete_subjs)
-# incomplete_path = os.path.join(DATA_DIR, 'incomplete_seq_subj_list.csv')
-# print(f'Saving subject list without complete sequences')
-# np.savetxt(incomplete_path, incomplete_subjs, delimiter=",")
-    
-#%%
 
 ''' RAS+ and 1mm isotropic resampling '''
 
@@ -105,13 +97,10 @@ for subject in tqdm(GET_DIR_LIST(INPUT_DIR)):
                 pass
         else:
             print(f'{resampled_path} already exists')
-    
-
-#%%
 
 resize_transforms = [
     tio.Resample(2),
-    tio.CropOrPad((120, 120, 78)) # 이거 안해주면 (121, 120, 78) 이런 게 생김
+    tio.CropOrPad((120, 120, 78)) 
 ]
 resize_transform = tio.Compose(resize_transforms) 
 
@@ -128,7 +117,6 @@ for subject in tqdm(GET_DIR_LIST(OUTPUT_DIR)):
             
             preprocessed = resize_transform(image)
             preprocessed.save(resized_path)
-            # preprocessed.plot()
 
         except FileNotFoundError:
             print(f'No file named {sequence}_resampled.nii.gz in {OUTPUT_DIR}')

@@ -1,7 +1,7 @@
 #!/bin/sh
 ### ref: https://github.com/NeuroAI-HD/HD-GLIO
 
-root_dir=/mnt/hdd3/mskim/GBL/data/$2 # SNUH_merged # SNUH_temporal # severance # TCGA_GBM #
+root_dir=/mnt/hdd3/mskim/GBL/data/$2 
 input_dir=${root_dir}/nifti_raw
 # resized_bhk
 target_dir=${root_dir}/no_hd_glio
@@ -14,7 +14,7 @@ if [ $1 = '--input_dir' ]; then
 
 	TotalStartTime=$(date +%s)
 
-	for subj in $(ls -l ${input_dir}|grep ^d|awk '{print $9}') # 이유는 모르지만 '15285841'는 seg.nii.gz 안 만들어짐 
+	for subj in $(ls -l ${input_dir}|grep ^d|awk '{print $9}') 
 		do
 		  	if [ -e ${input_dir}/$subj/t1.nii.gz ] && [ -e ${input_dir}/$subj/t2.nii.gz ] && [ -e ${input_dir}/$subj/t1ce.nii.gz ] && [ -e ${input_dir}/$subj/flair.nii.gz ]; then
 				echo "all sequences exist:" $subj
@@ -26,11 +26,11 @@ if [ $1 = '--input_dir' ]; then
 				pwd
 
 				echo "renaming for hd_glio preprocess" $subj
-				cp ${input_dir}/${subj}/t1.nii.gz T1.nii.gz # removed: _n4 
+				cp ${input_dir}/${subj}/t1.nii.gz T1.nii.gz 
 				cp ${input_dir}/${subj}/t1ce.nii.gz CT1.nii.gz
 				cp ${input_dir}/${subj}/t2.nii.gz T2.nii.gz
 				cp ${input_dir}/${subj}/flair.nii.gz FLAIR.nii.gz
-				# cp -arv ${ktrans_dir}/${subj}/Ktrans.nii.gz ${target_dir}/${subj}/Ktrans.nii.gz
+				
 				wait
 
 				echo "reorienting" $subj
@@ -41,7 +41,7 @@ if [ $1 = '--input_dir' ]; then
 				wait
 
 				echo "run hd bet" $subj 
-				hd-bet -i T1_reorient.nii.gz -o t1_bet.nii.gz -device 1 # hd-bet 이 CUDA OOM 만들기 때문에 parallel 돌릴 때 문제가 되는 부분: 하나 돌리는데 7000MB 정도 소요됨
+				hd-bet -i T1_reorient.nii.gz -o t1_bet.nii.gz -device 1 
 				hd-bet -i CT1_reorient.nii.gz -o ct1_bet.nii.gz -s 1 -device 1 # -s: save mask if 1
 				hd-bet -i T2_reorient.nii.gz -o t2_bet.nii.gz -device 1
 				hd-bet -i FLAIR_reorient.nii.gz -o flair_bet.nii.gz -device 1
@@ -69,36 +69,12 @@ if [ $1 = '--input_dir' ]; then
 				wait
 
 				echo "renaming for hd_glio_predict" ${subj}
-				# mv T1_reorient.nii.gz t1.nii.gz
 				mv ct1_bet.nii.gz t1ce.nii.gz
 				mv T1_reorient_reg_bet.nii.gz t1.nii.gz
 				mv T2_reorient_reg_bet.nii.gz t2.nii.gz
 				mv FLAIR_reorient_reg_bet.nii.gz flair.nii.gz
 				wait
 
-				 
-				# 1. 맨 처음에 reorient를 하니까 이상하게 오류가 나서 hd-bet 부터 함
-				# 2. 그래서 마지막에 reorient 다시 하려니까 그럴 필요가 없는게 /mnt/hdd2/kschoi/GBL/code/preprocess/nifti_preproc_2mm_no_hd_glio_sev.py 할 때 맨 처음에 하는 과정이 ToCanonical() 이라서 동일하다.
-				
-				# echo "final reorienting" $subj
-				# fslreorient2std T1.nii.gz T1_reorient.nii.gz
-				# fslreorient2std CT1.nii.gz CT1_reorient.nii.gz
-				# fslreorient2std T2.nii.gz T2_reorient.nii.gz
-				# fslreorient2std FLAIR.nii.gz FLAIR_reorient.nii.gz
-				# wait
-
-				# echo "hd_glio_predict" ${subj}
-				# hd_glio_predict -t1 t1.nii.gz -t1c t1ce.nii.gz -t2 t2.nii.gz -flair flair.nii.gz -o raw_seg.nii.gz 	  
-				# wait
-
-				# ### now copying it to original input_dir
-				# echo "binarizing segmentation as WT_seg" ${subj}
-				# fslmaths raw_seg.nii.gz -mas ct1_bet_mask.nii.gz seg.nii.gz
-				# fslmaths seg.nii.gz -bin WT_seg.nii.gz 
-
-				# wait
-
-				### reporting 
 				SubjEndTime=$(date +%s)
 				SubjElapsedTime=`echo "$SubjEndTime - $SubjStartTime" | bc`
 				htime=`echo "$SubjElapsedTime/3600" | bc`
