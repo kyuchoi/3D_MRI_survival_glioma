@@ -39,7 +39,7 @@ MUST install <https://pytorch.org/>
 
 ```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas  
 
-## Grad-CAM visualization for model interpretation in the following representative case
+### Grad-CAM visualization for model interpretation in the following representative case
 
 
 ```Figure 1.``` The model correctly predicted no death within a year (DPI, 0.483). Both enhancing tumor and surrounding nonenhancing tumor areas were attended, as shown in the overlay on (a) 3D postcontrast T1-weighted and (b) T2 FLAIR images.
@@ -54,15 +54,15 @@ MUST install <https://pytorch.org/>
 <img src="https://github.com/immsk1997/image/blob/master/brain2.jpg" width="128" height="128">  <img src="https://github.com/immsk1997/image/blob/master/cam2.jpg" width="" height="128">
 
 
-## Kaplan‒Meier curves of the low-risk group and high-risk group stratified according to DPI 
+### Kaplan‒Meier curves of the low-risk group and high-risk group stratified according to DPI 
 
 **(a) External test set 1**
 
-![image](https://github.com/immsk1997/image/blob/master/image.png)
+<img src="https://github.com/immsk1997/image/blob/master/image.png" width="250" height="250">
 
 **(b) External test set 2**
 
-![image](https://github.com/immsk1997/image/blob/master/image-1.png)
+<img src="https://github.com/immsk1997/image/blob/master/image-1.png" width="250" height="250">
 
 ## Docker images (images:tag)
 1. snuhradaicon/gbl_surv_distribution:snuhradaicon (released version)  
