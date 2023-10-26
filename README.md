@@ -58,11 +58,11 @@ MUST install <https://pytorch.org/>
 
 **(a) External test set 1**
 
-<img src="https://github.com/immsk1997/image/blob/master/image.png" width="250" height="250">
+<img src="https://github.com/immsk1997/image/blob/master/image.png" width="500" height="500">
 
 **(b) External test set 2**
 
-<img src="https://github.com/immsk1997/image/blob/master/image-1.png" width="250" height="250">
+<img src="https://github.com/immsk1997/image/blob/master/image-1.png" width="500" height="500">
 
 ## Docker images (images:tag)
 1. snuhradaicon/gbl_surv_distribution:snuhradaicon (released version)  
