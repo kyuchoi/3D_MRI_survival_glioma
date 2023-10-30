@@ -23,11 +23,11 @@ The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **Dense
 
 **(a) External test set 1**
 
-<img src="https://github.com/immsk1997/image/blob/master/image.png" width="600" height="300">
+<img src="https://github.com/immsk1997/image/blob/master/image.png" width="600" height="320">
 
 **(b) External test set 2**
 
-<img src="https://github.com/immsk1997/image/blob/master/image-1.png" width="600" height="300">
+<img src="https://github.com/immsk1997/image/blob/master/image-1.png" width="600" height="320">
 
 ## Directories Structure
 
