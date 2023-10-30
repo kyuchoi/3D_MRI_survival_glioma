@@ -65,16 +65,12 @@ Python3 (Anaconda) with following packages:
 
 ## 3D grad Class Activation Map
 
-```T1-Contrast Enhanced```
+**Click Text Link and View raw, then will be downloaded 3D grad-CAM MP4 file
+
+[T1CE grad CAM](https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_T1CE.mp4)
 
 
-![T1CE grad CAM](https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4)
-
-
-```T2-Flair```
-
-
-![Flair-grad CAM](https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4)
+[Flair-grad CAM](https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_FLAIR.mp4)
 
 
 ## Docker (images:tag)
