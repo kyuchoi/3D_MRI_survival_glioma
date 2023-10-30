@@ -60,11 +60,11 @@ The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **Dense
 **Click images and View raw, then will be downloaded 3D grad-CAM MP4 file**
 
 <a href="https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_T1CE.mp4">
-    <img src="https://github.com/immsk1997/image/blob/master/t1ce_mp4_image.png" width="200" height="200">
+    <img src="https://github.com/immsk1997/image/blob/master/t1ce_mp4_image.png" width="250" height="250">
 </image>
 
 <a href="https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_FLAIR.mp4">
-    <img src="https://github.com/immsk1997/image/blob/master/flair_mp4_image.png" width="200" height="200">
+    <img src="https://github.com/immsk1997/image/blob/master/flair_mp4_image.png" width="250" height="250">
 </image>
 
 
