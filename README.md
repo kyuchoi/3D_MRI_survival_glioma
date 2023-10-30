@@ -57,8 +57,6 @@ The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **Dense
 
 ```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas  
 
-### 3D grad Class Activation Map
-
 **Click Text Link and View raw, then will be downloaded 3D grad-CAM MP4 file**
 
 [T1CE grad CAM](https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_T1CE.mp4)
