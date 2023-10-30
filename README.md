@@ -23,18 +23,11 @@ The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **Dense
 
 **(a) External test set 1**
 
-<img src="https://github.com/immsk1997/image/blob/master/image.png" width="650" height="350">
+<img src="https://github.com/immsk1997/image/blob/master/image.png" width="600" height="320">
 
 **(b) External test set 2**
 
-<img src="https://github.com/immsk1997/image/blob/master/image-1.png" width="650" height="350">
-
-## Requirements
-Python3 (Anaconda) with following packages:
-
-    pytorch >= cuda 11.4 version
-
-MUST install <https://pytorch.org/>
+<img src="https://github.com/immsk1997/image/blob/master/image-1.png" width="600" height="320">
 
 ## Directories Structure
 
@@ -64,7 +57,23 @@ MUST install <https://pytorch.org/>
 
 ```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas  
 
-## Docker images (images:tag)
+**Click images and View raw, then will be downloaded 3D grad-CAM MP4 file**
+
+<a href="https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_T1CE.mp4">
+    <img src="https://github.com/immsk1997/image/blob/master/t1ce_mp4_image.png" width="250" height="250">
+</image>
+
+<a href="https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_FLAIR.mp4">
+    <img src="https://github.com/immsk1997/image/blob/master/flair_3d_image.png" width="250" height="250">
+</image>
+
+
+## Requirements
+Python3 (Anaconda) with following packages:
+
+    pytorch >= cuda 11.4 version
+
+## Docker (images:tag)
 1. snuhradaicon/gbl_surv_distribution:snuhradaicon (released version)  
   
 
@@ -81,18 +90,26 @@ First
 
 Second
 
-    docker run --gpus all -it snuhradaicon/gbl_surv_distribution:snuhradaicon
+    docker run --gpus all -it --shm-size=24G snuhradaicon/gbl_surv_distribution:snuhradaicon
   
 
-Third  
+Third
+
+
+**Run tio.histogram_train.py**
+
+    python tio_histogram_train.py [--root_dir] [--dataset_name] [--dataset_list]
+
+
+Fourth  
   
 
-```3-1``` Run main_copy.py
+```4-1``` Run main_copy.py
 
     python main_copy.py 
   
 
-```3-2``` Run train_inference_copy.py
+```4-2``` Run train_inference_copy.py
 
     python train_inference_copy.py
 
@@ -114,7 +131,7 @@ First
 
 Second
     
-    docker run --gpus all -it snuhradaicon/gbl_surv_custom:snuhradaicon
+    docker run --gpus all -it --shm-size=24G snuhradaicon/gbl_surv_custom:snuhradaicon
   
 
 Third
@@ -139,8 +156,13 @@ Fourth
 ```4-2``` Run resample.py
 
     python resample.py [--fix_sequence] [--resize_type] [--dataset_name] [--root_dir]
-  
-  
+
+
+```4-3``` Run tio.histogram_train.py
+
+    python tio_histogram_train.py [--root_dir] [--dataset_name] [--dataset_list]
+
+
 Fifth
 
 
