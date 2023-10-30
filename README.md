@@ -63,7 +63,17 @@ MUST install <https://pytorch.org/>
 
 ```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas  
 
-## Docker images (images:tag)
+## 3D grad Class Activation Map
+
+```T1-Contrast Enhanced```
+<video src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4" width = "500", height="400">
+
+
+```T2-Flair```
+<video src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4" width = "500", height="400">
+
+
+## Docker (images:tag)
 1. snuhradaicon/gbl_surv_distribution:snuhradaicon (released version)  
   
 
@@ -80,7 +90,7 @@ First
 
 Second
 
-    docker run --gpus all -it snuhradaicon/gbl_surv_distribution:snuhradaicon
+    docker run --gpus all -it --shm-size=24G snuhradaicon/gbl_surv_distribution:snuhradaicon
   
 
 Third  
@@ -113,7 +123,7 @@ First
 
 Second
     
-    docker run --gpus all -it snuhradaicon/gbl_surv_custom:snuhradaicon
+    docker run --gpus all -it --shm-size=24G snuhradaicon/gbl_surv_custom:snuhradaicon
   
 
 Third
@@ -138,8 +148,13 @@ Fourth
 ```4-2``` Run resample.py
 
     python resample.py [--fix_sequence] [--resize_type] [--dataset_name] [--root_dir]
-  
-  
+
+
+```4-3``` Run tio.histogram_train.py
+
+    python tio_histogram_train.py [--root_dir] [--dataset_name] [--dataset_list]
+
+
 Fifth
 
 
