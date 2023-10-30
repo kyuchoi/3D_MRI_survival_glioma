@@ -67,18 +67,12 @@ Python3 (Anaconda) with following packages:
 
 ```T1-Contrast Enhanced```
 
-
-<video controls>
- <source src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4" type="video/mp4">
-</video>
+[T1ce-grad CAM]("https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4")
 
 
 ```T2-Flair```
 
-
-<video controls>
- <source src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4" type="video/mp4">
-</video>
+[Flair-grad CAM]("https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4")
 
 
 ## Docker (images:tag)
