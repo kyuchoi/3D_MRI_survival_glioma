@@ -67,10 +67,14 @@ MUST install <https://pytorch.org/>
 ## 3D grad Class Activation Map
 
 ```T1-Contrast Enhanced```
+
+
 <video src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4" width = "500", height="400">
 
 
 ```T2-Flair```
+
+
 <video src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4" width = "500", height="400">
 
 
