@@ -57,12 +57,16 @@ The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **Dense
 
 ```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas  
 
-**Click image Link and View raw, then will be downloaded 3D grad-CAM MP4 file**
+**Click images and View raw, then will be downloaded 3D grad-CAM MP4 file**
 
-[T1CE grad CAM](https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_T1CE.mp4)
+<a href="https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_T1CE.mp4">
+    <img src="https://github.com/immsk1997/image/blob/master/t1ce_mp4_image.png" width="200" height="200">
+</image>
 
+<a href="https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_FLAIR.mp4">
+    <img src="https://github.com/immsk1997/image/blob/master/flair_mp4_image.png" width="200" height="200">
+</image>
 
-[Flair-grad CAM](https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_FLAIR.mp4)
 
 ## Requirements
 Python3 (Anaconda) with following packages:
