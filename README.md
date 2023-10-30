@@ -34,7 +34,6 @@ Python3 (Anaconda) with following packages:
 
     pytorch >= cuda 11.4 version
 
-MUST install <https://pytorch.org/>
 
 ## Directories Structure
 
@@ -70,7 +69,7 @@ MUST install <https://pytorch.org/>
 
 
 <video controls>
-    <source src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4" type="video/mp4">
+ <source src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4" type="video/mp4">
 </video>
 
 
@@ -78,7 +77,7 @@ MUST install <https://pytorch.org/>
 
 
 <video controls>
-    <source src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4" type="video/mp4">
+ <source src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4" type="video/mp4">
 </video>
 
 
