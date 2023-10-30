@@ -64,7 +64,7 @@ The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **Dense
 </image>
 
 <a href="https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_FLAIR.mp4">
-    <img src="https://github.com/immsk1997/image/blob/master/flair_mp4_image.png" width="250" height="250">
+    <img src="https://github.com/immsk1997/image/blob/master/flair_3d_image.png" width="250" height="250">
 </image>
 
 
