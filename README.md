@@ -68,13 +68,13 @@ Python3 (Anaconda) with following packages:
 ```T1-Contrast Enhanced```
 
 
-![T1ce-grad CAM]("https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4")
+![T1CE grad CAM](https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4)
 
 
 ```T2-Flair```
 
 
-![Flair-grad CAM]("https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4")
+![Flair-grad CAM](https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4)
 
 
 ## Docker (images:tag)
@@ -97,15 +97,23 @@ Second
     docker run --gpus all -it --shm-size=24G snuhradaicon/gbl_surv_distribution:snuhradaicon
   
 
-Third  
+Third
+
+
+**Run tio.histogram_train.py**
+
+    python tio_histogram_train.py [--root_dir] [--dataset_name] [--dataset_list]
+
+
+Fourth  
   
 
-```3-1``` Run main_copy.py
+```4-1``` Run main_copy.py
 
     python main_copy.py 
   
 
-```3-2``` Run train_inference_copy.py
+```4-2``` Run train_inference_copy.py
 
     python train_inference_copy.py
 
