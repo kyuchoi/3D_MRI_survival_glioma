@@ -71,6 +71,7 @@ MUST install <https://pytorch.org/>
 
 <video width="500", height="400" controls>
     <source src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4" type="video/mp4">
+</video>
 
 
 ```T2-Flair```
@@ -78,6 +79,7 @@ MUST install <https://pytorch.org/>
 
 <video width="500", height="400" controls>
     <source src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4" type="video/mp4">
+</video>
 
 
 ## Docker (images:tag)
