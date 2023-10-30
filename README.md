@@ -59,10 +59,10 @@ The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **Dense
 
 **Click image Link and View raw, then will be downloaded 3D grad-CAM MP4 file**
 
-[![T1CE grad CAM](https://github.com/immsk1997/image/blob/master/t1ce_mp4_image.png)](https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_T1CE.mp4)
+[T1CE grad CAM](https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_T1CE.mp4)
 
 
-[![Flair-grad CAM](https://github.com/immsk1997/image/blob/master/flair_mp4_image.png)](https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_FLAIR.mp4)
+[Flair-grad CAM](https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_FLAIR.mp4)
 
 ## Requirements
 Python3 (Anaconda) with following packages:
