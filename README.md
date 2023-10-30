@@ -23,17 +23,11 @@ The developed 3-types based network (**Squeeze-and-Excitation ResNeXt**, **Dense
 
 **(a) External test set 1**
 
-<img src="https://github.com/immsk1997/image/blob/master/image.png" width="650" height="350">
+<img src="https://github.com/immsk1997/image/blob/master/image.png" width="600" height="300">
 
 **(b) External test set 2**
 
-<img src="https://github.com/immsk1997/image/blob/master/image-1.png" width="650" height="350">
-
-## Requirements
-Python3 (Anaconda) with following packages:
-
-    pytorch >= cuda 11.4 version
-
+<img src="https://github.com/immsk1997/image/blob/master/image-1.png" width="600" height="300">
 
 ## Directories Structure
 
@@ -63,7 +57,7 @@ Python3 (Anaconda) with following packages:
 
 ```3D grad CAM``` is the output of an 3D CNN Deep Learning Model From Preoperative MRI for Adult-type Diffuse Gliomas  
 
-## 3D grad Class Activation Map
+### 3D grad Class Activation Map
 
 **Click Text Link and View raw, then will be downloaded 3D grad-CAM MP4 file**
 
@@ -72,6 +66,10 @@ Python3 (Anaconda) with following packages:
 
 [Flair-grad CAM](https://github.com/kyuchoi/3D_MRI_survival_glioma/blob/main/3D%20grad%20CAM/Supplementary%20Video%201_FLAIR.mp4)
 
+## Requirements
+Python3 (Anaconda) with following packages:
+
+    pytorch >= cuda 11.4 version
 
 ## Docker (images:tag)
 1. snuhradaicon/gbl_surv_distribution:snuhradaicon (released version)  
