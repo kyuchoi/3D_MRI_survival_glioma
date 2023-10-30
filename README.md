@@ -69,13 +69,15 @@ MUST install <https://pytorch.org/>
 ```T1-Contrast Enhanced```
 
 
-<video src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4" width = "500", height="400">
+<video width="500", height="400" controls>
+    <source src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_T1CE.mp4" type="video/mp4">
 
 
 ```T2-Flair```
 
 
-<video src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4" width = "500", height="400">
+<video width="500", height="400" controls>
+    <source src="https://github.com/immsk1997/image/blob/master/Supplementary%20Video%201_FLAIR.mp4" type="video/mp4">
 
 
 ## Docker (images:tag)
